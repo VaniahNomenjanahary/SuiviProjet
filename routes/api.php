@@ -19,14 +19,15 @@ use App\Http\Controllers\TachesController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:api')->group(function(){
     Route::get('/user', function (Request $request) { return $request->user();});
     Route::get('taches/{id}', [TachesController::class, 'show']);
     Route::delete('taches/{id}/validation', [TachesController::class, 'validationdelete'])->middleware('admin');
+    Route::get('utilisateur', [UserController::class, 'index']);
 });
 
 Route::get('taches', [TachesController::class, 'index']);
@@ -37,7 +38,6 @@ Route::post('projet',[ProjetController::class, 'store']);
 Route::get('projet/{id}', [ProjetController::class, 'show']);
 Route::delete('projet/{id}', [ProjetController::class, 'destroy']);
 
-Route::get('utilisateur', [UserController::class, 'index']);
 Route::post('utilisateur', [Usercontroller::class, 'store']);
 Route::get('utilisateur/{id}', [UserController::class, 'show']);
 Route::put('utilisateur/{id}', [UserController::class, 'update']);

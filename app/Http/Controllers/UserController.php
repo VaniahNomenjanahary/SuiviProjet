@@ -9,11 +9,24 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class UserController extends Controller 
 {
-    public function index(){
+    public function index(Request $request){
         $utilisateur = User::all();
+        $token = $request->header('Authorization');
+        if (!$token) {
+            return response()->json(['errors' => 'invalid token'()], 401);
+        }
+        $token = str_replace('Bearer ', '', $token);
+        $payload = JWTAuth::setToken($token)->getPayload();
+        $role = $payload['role'];
+        if($role != 'admin') {
+            return response()->json(['errors' => 'user unhautorizedd'()], 403);
+        }
+
         return response()->json(['user' => $utilisateur]);
     }
 
@@ -29,7 +42,6 @@ class UserController extends Controller
             'fonction' => 'required',
             'role' => 'required',
         ]);
-
         if ($validator->fails()){
             return response()->json(['errors' => $validator->errors()], 404);
         }
@@ -50,9 +62,10 @@ class UserController extends Controller
             $utilisateur->photo = $imageName;
             $utilisateur->fonction = $request->input('fonction');
             $utilisateur->role = $request->input('role');
-            $utilisateur->save(); 
+            $utilisateur->save();
+            $token = JWTAuth::fromUser($utilisateur);
 
-            return response()->json(['message'=> 'Utilisateur crée avec succes'], 201);
+            return response()->json(['user'=> $utilisateur, 'token' => $token], 201);
         } catch (QueryException $e) {
             $errorCode = $e->errorInfo[1]; 
             if ($errorCode == 1062) {
@@ -67,7 +80,21 @@ class UserController extends Controller
         }
     }
 
-    public function show($id){
+    public function show($id, Request $request){
+        $token = $request->header('Authorization');
+        if (!$token) {
+            return response()->json(['errors' => 'invalid token'()], 401);
+        }
+        $token = str_replace('Bearer ', '', $token);
+        $payload = JWTAuth::setToken($token)->getPayload();
+        $role = $payload['role'];
+        $user_id = $payload['id'];
+        if($role != 'admin') {
+            if($id != $user_id) {
+                return response()->json(['errors' => 'user unhautorizedd'()], 403);
+            }
+        }
+
         return User::find($id);
     }
 
@@ -97,25 +124,25 @@ class UserController extends Controller
 
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $validator = Validator::make($request->all(), [
-            'ids' => 'required|array',
-            'ids.*' => 'exists:utilisateur,id',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'ids' => 'required|array',
+        //     'ids.*' => 'exists:utilisateur,id',
+        // ]);
 
-        if($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
+        // if($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()], 400);
+        // }
 
         try {
-            DB::beginTransaction();
-
-            foreach($request->input('ids') as $id) {
-                $utilisateur = User::find($id);
-                $utilisateur->delete();
-            }
-            DB::commit();
+            // DB::beginTransaction();
+            $utilisateur = User::find($id);
+            $utilisateur->delete();
+            // foreach($request->input('ids') as $id) {
+            // }
+            // DB::commit();
+            
             return response()->json(['message' => 'Utilisateur supprimé avec succès']);
         } catch (\Exception $e) {
             DB::rollBack();

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Projet extends Model 
 {
@@ -24,31 +23,6 @@ class Projet extends Model
 
     public function utilisateur(){
         return $this->belongsTo(User::class, 'idutilisateur');
-    }
-
-    /**
-     * Retourne l'identifiant JWT de l'utilisateur.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey(); // Cela retourne l'identifiant de l'utilisateur
-    }
-
-    /**
-     * Retourne les revendications personnalisées du JWT.
-     *
-     * @param array $extraClaims
-     * @return array
-     */
-    public function getJWTCustomClaims(array $extraClaims = [])
-    {
-        return [
-            'role' => $this->role,
-            'id' => $this->id,
-            'fonction' => $this->fonction,
-        ]; // Vous pouvez ajouter des revendications personnalisées ici si nécessaire
     }
 }
 

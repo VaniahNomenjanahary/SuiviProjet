@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Projet;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProjetController extends Controller 
 {
@@ -20,7 +19,10 @@ class ProjetController extends Controller
         $role = $payload['role'];
         $fonc= $payload['fonction'];
         if($role != 'admin') {
-            return response()->json(['errors' => 'user unhautorizedd'()], 403);
+            //ito mba checkeo kely oe inona ny ao amle fonction
+            if($fonc != 'chef'){
+                return response()->json(['errors' => 'user unhautorizedd'()], 403);
+            }
         }
 
         $projet = Projet::all();

@@ -74,6 +74,7 @@ class User extends Authenticatable implements JWTSubject // Ajout de l'interface
         return [
             'role' => $this->role,
             'id' => $this->id,
+            'fonction' => $this->fonction,
         ]; // Vous pouvez ajouter des revendications personnalisées ici si nécessaire
     }
 }

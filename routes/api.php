@@ -19,15 +19,16 @@ use App\Http\Controllers\TachesController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::post('login', [LoginController::class , 'login'])->name('login');
 
 Route::middleware('auth:api')->group(function(){
-    Route::get('/user', function (Request $request) { return $request->user();});
+    Route::get('utilisateur', [UserController::class, 'index']);
+    Route::get('utilisateur/{id}', [UserController::class, 'show']);
+    Route::put('utilisateur/{id}', [UserController::class, 'update']);
+    Route::delete('utilisateur/{id}', [UserController::class, 'destroy']);
+
     Route::get('taches/{id}', [TachesController::class, 'show']);
     Route::delete('taches/{id}/validation', [TachesController::class, 'validationdelete'])->middleware('admin');
-    Route::get('utilisateur', [UserController::class, 'index']);
 });
 
 Route::get('taches', [TachesController::class, 'index']);
@@ -39,15 +40,11 @@ Route::get('projet/{id}', [ProjetController::class, 'show']);
 Route::delete('projet/{id}', [ProjetController::class, 'destroy']);
 
 Route::post('utilisateur', [Usercontroller::class, 'store']);
-Route::get('utilisateur/{id}', [UserController::class, 'show']);
-Route::put('utilisateur/{id}', [UserController::class, 'update']);
-Route::delete('utilisateur/{id}', [UserController::class, 'destroy']);
+
 Route::post('utilisateur/{idutilisateur}/{idtache}', [Usercontroller::class, 'associeruser']);
 Route::post('utilisateur/{idutilisateur}/{idtache}/detach', [Usercontroller::class, 'detacheruser']);
 
 
-
-Route::post('login', [LoginController::class , 'login']);
 Route::put('connexion/remember', [LoginController::class , 'updateRememberToken']);
 
 Route::get('statut', [StatutController::class, 'index']);

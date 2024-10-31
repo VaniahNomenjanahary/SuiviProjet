@@ -18,7 +18,7 @@ class UserController extends Controller
         $utilisateur = User::all();
         $token = $request->header('Authorization');
         if (!$token) {
-            return response()->json(['errors' => 'invalid token'()], 401);
+            return response()->json(['errors' => 'invalid token'], 401);
         }
         $token = str_replace('Bearer ', '', $token);
         $payload = JWTAuth::setToken($token)->getPayload();
@@ -80,10 +80,10 @@ class UserController extends Controller
         }
     }
 
-    public function show($id, Request $request){
+    public function show(Request $request, $id){
         $token = $request->header('Authorization');
         if (!$token) {
-            return response()->json(['errors' => 'invalid token'()], 401);
+            return response()->json(['errors' => 'invalid token'], 401);
         }
         $token = str_replace('Bearer ', '', $token);
         $payload = JWTAuth::setToken($token)->getPayload();
@@ -99,6 +99,21 @@ class UserController extends Controller
     }
 
     public function update(Request $request, $id){
+        $token = $request->header('Authorization');
+        if (!$token) {
+            return response()->json(['errors' => 'invalid token'], 401);
+        }
+        $token = str_replace('Bearer ', '', $token);
+        $payload = JWTAuth::setToken($token)->getPayload();
+        $role = $payload['role'];
+        $user_id = $payload['id'];
+
+        if($role != 'admin') {
+            if($id != $user_id) {
+                return response()->json(['errors' => 'unauthorized'], 403);
+            }
+        }
+
         $utilisateur = User::find($id);
         $utilisateur->nom = $request->input('nom');
         $utilisateur->prenom = $request->input('prenom');
@@ -124,16 +139,34 @@ class UserController extends Controller
 
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'ids' => 'required|array',
-        //     'ids.*' => 'exists:utilisateur,id',
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'password' => 'required',
+            'confirmPass' => 'required',
+        ]);
 
-        // if($validator->fails()) {
-        //     return response()->json(['errors' => $validator->errors()], 400);
-        // }
+        $password = $request->input('password');
+        $confirm = $request->input('confirmPass');
+
+        if($validator->fails() || $password != $confirm) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $token = $request->header('Authorization');
+        if (!$token) {
+            return response()->json(['errors' => 'invalid token'], 401);
+        }
+        $token = str_replace('Bearer ', '', $token);
+        $payload = JWTAuth::setToken($token)->getPayload();
+        $role = $payload['role'];
+        $user_id = $payload['id'];
+
+        if($role != 'admin') {
+            if($id != $user_id) {
+                return response()->json(['errors' => 'unauthorized'], 403);
+            }
+        }
 
         try {
             // DB::beginTransaction();
@@ -153,8 +186,23 @@ class UserController extends Controller
         }
     }
 
-    public function associeruser($iduser, $idtache)
+    public function associeruser($iduser, $idtache, Request $request)
     {
+        $token = $request->header('Authorization');
+        if (!$token) {
+            return response()->json(['errors' => 'invalid token'], 401);
+        }
+        $token = str_replace('Bearer ', '', $token);
+        $payload = JWTAuth::setToken($token)->getPayload();
+        $role = $payload['role'];
+        $user_id = $payload['id'];
+
+        if($role != 'admin') {
+            if($iduser != $user_id) {
+                return response()->json(['errors' => 'unauthorized'], 403);
+            }
+        }
+
         $utilisateur = User::find($iduser);
         $utilisateur->taches()->attach($idtache);
 

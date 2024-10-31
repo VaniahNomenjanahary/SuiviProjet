@@ -24,7 +24,7 @@ class UserController extends Controller
         $payload = JWTAuth::setToken($token)->getPayload();
         $role = $payload['role'];
         if($role != 'admin') {
-            return response()->json(['errors' => 'user unhautorizedd'()], 403);
+            return response()->json(['errors' => 'user unhautorized'], 403);
         }
 
         return response()->json(['user' => $utilisateur]);
@@ -164,7 +164,7 @@ class UserController extends Controller
 
         if($role != 'admin') {
             if($id != $user_id) {
-                return response()->json(['errors' => 'unauthorized'], 403);
+                return response()->json(['errors' => 'unauthorized'], 401);
             }
         }
 

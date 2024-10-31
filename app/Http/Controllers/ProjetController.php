@@ -8,8 +8,23 @@ use Illuminate\Http\Request;
 
 class ProjetController extends Controller 
 {
-    public function index()
+    public function index(Request $request)
     {
+        $token = $request->header('Authorization');
+        if (!$token) {
+            return response()->json(['errors' => 'invalid token'], 401);
+        }
+        $token = str_replace('Bearer ', '', $token);
+        $payload = JWTAuth::setToken($token)->getPayload();
+        $role = $payload['role'];
+        $fonc= $payload['fonction'];
+        if($role != 'admin') {
+            //ito mba checkeo kely oe inona ny ao amle fonction
+            if($fonc != 'chef'){
+                return response()->json(['errors' => 'user unhautorizedd'()], 403);
+            }
+        }
+
         $projet = Projet::all();
         return response()->json(['projet'=>$projet]);
     }

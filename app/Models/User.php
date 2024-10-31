@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject // Ajout de l'interface JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'utilisateur';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -36,7 +37,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'token',
     ];
 
     /**
@@ -48,7 +48,33 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function taches(){
-        return $this->belongsToMany(Taches::class, 'taches_user','user_id','taches_id');
+    public function taches()
+    {
+        return $this->belongsToMany(Taches::class, 'taches_user', 'user_id', 'taches_id');
+    }
+
+    /**
+     * Retourne l'identifiant JWT de l'utilisateur.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey(); // Cela retourne l'identifiant de l'utilisateur
+    }
+
+    /**
+     * Retourne les revendications personnalisées du JWT.
+     *
+     * @param array $extraClaims
+     * @return array
+     */
+    public function getJWTCustomClaims(array $extraClaims = [])
+    {
+        return [
+            'role' => $this->role,
+            'id' => $this->id,
+            'fonction' => $this->fonction,
+        ]; // Vous pouvez ajouter des revendications personnalisées ici si nécessaire
     }
 }

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+
 
 class LoginController extends Controller 
 {
@@ -20,19 +24,34 @@ class LoginController extends Controller
 
         $credentials = $request->only('mail', 'password');
 
-        if(Auth::attempt($credentials)){
-            $utilisateur = Auth::user();
-            $token = $utilisateur->createToken('Suiviprojet')->plainTextToken;
-            $utilisateur->save();
-
-            return response()->json([
-                'message' => 'Connecté avec success',
-                'token' => $token,
-                'role' => $utilisateur->role
-            ], 200);
-        } else {
-            return response()->json(['message' => 'Erreur Authentification'], 401);
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['message' => 'Erreur Authentification'], 401);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['message' => 'Erreur lors de la création du token'], 500);
         }
+
+        $utilisateur = User::where('mail', $request->mail)->first();
+
+        return response()->json([
+            'message' => 'Connecté avec succès',
+            'token' => $token,
+            'role' => $utilisateur->role
+        ], 200);
+        // if(Auth::attempt($credentials)){
+        //     $utilisateur = Auth::user();
+        //     $token = $utilisateur->createToken('auth_token')->plainTextToken;
+        //     $utilisateur->save();
+
+        //     return response()->json([
+        //         'message' => 'Connecté avec success',
+        //         'token' => $token,
+        //         'role' => $utilisateur->role
+        //     ], 200);
+        // } else {
+        //     return response()->json(['message' => 'Erreur Authentification'], 401);
+        // }
     }
 
     public function updateRememberToken(Request $request)

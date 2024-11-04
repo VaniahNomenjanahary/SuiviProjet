@@ -19,7 +19,7 @@ use App\Http\Controllers\TachesController;
 |
 */
 
-Route::post('login', [LoginController::class , 'login'])->name('login');
+Route::post('login', [LoginController::class , 'login']);   
 
 Route::middleware('auth:api')->group(function(){
     Route::get('utilisateur', [UserController::class, 'index']);

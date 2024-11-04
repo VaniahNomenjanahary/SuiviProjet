@@ -8,9 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller 
 {
@@ -24,7 +23,7 @@ class UserController extends Controller
         $payload = JWTAuth::setToken($token)->getPayload();
         $role = $payload['role'];
         if($role != 'admin') {
-            return response()->json(['errors' => 'user unhautorized'], 403);
+            return response()->json(['errors' => 'user unhautorized'], 413);
         }
 
         return response()->json(['user' => $utilisateur]);
@@ -188,20 +187,20 @@ class UserController extends Controller
 
     public function associeruser($iduser, $idtache, Request $request)
     {
-        $token = $request->header('Authorization');
-        if (!$token) {
-            return response()->json(['errors' => 'invalid token'], 401);
-        }
-        $token = str_replace('Bearer ', '', $token);
-        $payload = JWTAuth::setToken($token)->getPayload();
-        $role = $payload['role'];
-        $user_id = $payload['id'];
+        // $token = $request->header('Authorization');
+        // if (!$token) {
+        //     return response()->json(['errors' => 'invalid token'], 401);
+        // }
+        // $token = str_replace('Bearer ', '', $token);
+        // $payload = JWTAuth::setToken($token)->getPayload();
+        // $role = $payload['role'];
+        // $user_id = $payload['id'];
 
-        if($role != 'admin') {
-            if($iduser != $user_id) {
-                return response()->json(['errors' => 'unauthorized'], 403);
-            }
-        }
+        // if($role != 'admin') {
+        //     if($iduser != $user_id) {
+        //         return response()->json(['errors' => 'unauthorized'], 403);
+        //     }
+        // }
 
         $utilisateur = User::find($iduser);
         $utilisateur->taches()->attach($idtache);

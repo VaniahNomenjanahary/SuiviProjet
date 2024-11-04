@@ -32,7 +32,7 @@ class ProjetController extends Controller
     public function store(Request $request)
     {
         $projet = new Projet();
-        $pprojet->idutilisateur = $request->idutilisateur;
+        $projet->idutilisateur = $request->idutilisateur;
         $projet->intitule = $request->intitule;
         $projet->descriptions = $request->descriptions;
         $projet->datedebut = $request->datedebut;

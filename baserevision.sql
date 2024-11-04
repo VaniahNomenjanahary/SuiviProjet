@@ -22,6 +22,8 @@ Create table projet(
     datedebut date,
     datefin date,
     deleted_at date,
+    updated_at date,
+    created_at date,
     attente boolean
 );
 

@@ -39,19 +39,6 @@ class LoginController extends Controller
             'token' => $token,
             'role' => $utilisateur->role
         ], 200);
-        // if(Auth::attempt($credentials)){
-        //     $utilisateur = Auth::user();
-        //     $token = $utilisateur->createToken('auth_token')->plainTextToken;
-        //     $utilisateur->save();
-
-        //     return response()->json([
-        //         'message' => 'Connecté avec success',
-        //         'token' => $token,
-        //         'role' => $utilisateur->role
-        //     ], 200);
-        // } else {
-        //     return response()->json(['message' => 'Erreur Authentification'], 401);
-        // }
     }
 
     public function updateRememberToken(Request $request)

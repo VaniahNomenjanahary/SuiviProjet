@@ -26,6 +26,10 @@ class Taches extends Model
     'attente'
     ];
 
+    protected $hidden = [
+        'idstatut'
+    ];
+
     public function projet(){
         return $this->belongsTo(Projet::class, 'idprojet');
     }

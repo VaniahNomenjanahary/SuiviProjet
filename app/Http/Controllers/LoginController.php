@@ -37,7 +37,7 @@ class LoginController extends Controller
         return response()->json([
             'message' => 'Connecté avec succès',
             'token' => $token,
-            'role' => $utilisateur->role
+            'userID' => $utilisateur->id
         ], 200);
     }
 
@@ -62,7 +62,7 @@ class LoginController extends Controller
             return response()->json([
                 'message' => 'Succes',
                 'remember_token' => $utilisateur->remember_token,
-                'role' => $utilisateur->role
+                'userID' => $utilisateur->id
             ], 200);
         } else {
             return response()->json(['message' => 'Invalide'], 401);

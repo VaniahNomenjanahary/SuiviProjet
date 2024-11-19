@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StatutController;
 use App\Http\Controllers\TachesController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,9 @@ Route::post('utilisateur', [Usercontroller::class, 'store']);
 Route::post('utilisateur/{idutilisateur}/{idtache}', [Usercontroller::class, 'associeruser']);
 Route::post('utilisateur/{idutilisateur}/{idtache}/detach', [Usercontroller::class, 'detacheruser']);
 
+Route::get('notification', [NotificationController::class, 'index']);
+Route::post('notification', [NotificationController::class, 'store']);
+Route::delete('notification/{id}', [NotificationController::class, 'destroy']);
 
 Route::put('connexion/remember', [LoginController::class , 'updateRememberToken']);
 

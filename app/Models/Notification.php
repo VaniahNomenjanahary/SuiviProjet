@@ -11,9 +11,11 @@ class Notification extends Model
     use HasFactory;
     protected $table = 'notifications';
 
+    public $timestamps = false;
     protected $fillable = [
         'contenu',
         'id_utilisateur',
-        'type'
+        'type',
+        'senderID'
     ];
 }

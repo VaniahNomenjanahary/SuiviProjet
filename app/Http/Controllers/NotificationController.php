@@ -5,13 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+
 
 
 class NotificationController extends Controller 
 {
   public function index() {
     $notification = Notification::all();
-    return response()->json(['notification' => $notification]);
+    $response = [];
+    for($i = 0; $i < count($notification); $i++) {
+      $utilisateur = User::find($notification[$i]->senderID);
+      $notif = new Notification;
+      $notif->contenu = $notification[$i]->contenu;
+      $notif->id_utilisateur = $notification[$i]->id_utilisateur;
+      $notif->type = $notification[$i]->type;
+      $notif->sender = $utilisateur->nom;
+      array_push($response, $notif);
+    }
+    return response()->json(['notification' => $response]);
   }
 
   public function store(Request $request) {
@@ -25,6 +37,9 @@ class NotificationController extends Controller
 
     $notification = new Notification();
     $notification->contenu = $request->input('contenu');
+    $notification->id_utilisateur = $request->input('id_utilisateur');
+    $notification->type = $request->input('type');
+    $notification->senderID = $request->input('senderID');
     $notification->save();
 
     return response()->json(['notification'=> $notification], 201);

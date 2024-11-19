@@ -37,6 +37,8 @@ class User extends Authenticatable implements JWTSubject // Ajout de l'interface
      */
     protected $hidden = [
         'password',
+        'pivot',
+        'token'
     ];
 
     /**

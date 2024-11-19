@@ -42,7 +42,7 @@ class UserController extends Controller
             'role' => 'required',
         ]);
         if ($validator->fails()){
-            return response()->json(['errors' => $validator->errors()], 404);
+            return response()->json(['errors' => $validator->errors()], 403);
         }
 
         try{

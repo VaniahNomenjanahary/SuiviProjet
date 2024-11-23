@@ -19,13 +19,13 @@ class ProjetController extends Controller
         $role = $payload['role'];
         $fonc= $payload['fonction'];
         if($role != 'admin') {
-            //ito mba checkeo kely oe inona ny ao amle fonction
+    
             if($fonc != 'chef'){
                 return response()->json(['errors' => 'user unhautorizedd'()], 403);
             }
         }
 
-        $projet = Projet::all();
+        $projet = Projet::with('utilisateur')->get();
         return response()->json(['projet'=>$projet]);
     }
 

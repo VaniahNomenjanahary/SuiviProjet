@@ -208,6 +208,15 @@ class UserController extends Controller
         return response()->json(['message'=> 'Tache affecté'], 201);
     }
 
+    public function associerprojet($iduser, $idprojet, Request $request)
+    {
+        $utilisateur = User::find($iduser);
+        $utilisateur->projets()->attach($idtache);
+
+        return response()->json(['message'=> 'Tache affecté'], 201);
+    }
+
+
     public function detacheruser($iduser, $idtache)
     {
         $utilisateur = User::find($iduser);

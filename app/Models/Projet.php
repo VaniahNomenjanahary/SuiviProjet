@@ -22,7 +22,7 @@ class Projet extends Model
     }
 
     public function utilisateur(){
-        return $this->belongsTo(User::class, 'idutilisateur');
+        return $this->belongsToMany(User::class, 'idutilisateur');
     }
 }
 

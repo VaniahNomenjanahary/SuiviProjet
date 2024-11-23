@@ -10,8 +10,7 @@ Create table utilisateur(
     fonction varchar(50),
     role varchar(50),
     created_at date,
-    updated_at date,
-    token varchar(250)
+    updated_at date
 );
 
 Create table projet(
@@ -62,6 +61,13 @@ Create table taches_user(
     taches_id int,
     FOREIGN key (user_id) REFERENCES utilisateur(id) ON DELETE CASCADE,
     FOREIGN key (taches_id) REFERENCES taches(id) ON DELETE CASCADE
+);
+
+Create table projet_user(
+    user_id int,
+    projet_id int,
+    FOREIGN key (user_id) REFERENCES utilisateur(id) ON DELETE CASCADE,
+    FOREIGN key (projet_id) REFERENCES projet(id) ON DELETE CASCADE
 );
 
 Create table commentaire(

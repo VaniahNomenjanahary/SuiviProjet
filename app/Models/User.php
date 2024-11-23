@@ -37,6 +37,7 @@ class User extends Authenticatable implements JWTSubject // Ajout de l'interface
      */
     protected $hidden = [
         'password',
+        'pivot',
     ];
 
     /**
@@ -53,6 +54,9 @@ class User extends Authenticatable implements JWTSubject // Ajout de l'interface
         return $this->belongsToMany(Taches::class, 'taches_user', 'user_id', 'taches_id');
     }
 
+    public function projets(){
+        return $this->belongsToMany(Projet::class, 'projet_user', 'user_id', 'projet_id');
+    }
     /**
      * Retourne l'identifiant JWT de l'utilisateur.
      *

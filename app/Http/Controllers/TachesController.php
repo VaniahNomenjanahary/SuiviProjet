@@ -9,7 +9,11 @@ use Carbon\Carbon;
 class TachesController extends Controller 
 {
     public function index(){
+<<<<<<< HEAD
         $taches = Taches::with('utilisateurs', 'statut')->get();
+=======
+        $taches = Taches::with(['projet', 'statut', 'utilisateurs'])->get();
+>>>>>>> 60d90b29ee709a58b7591bee51ee04aa5a9cc74e
        /* $tachesAutorisees = $taches->filter(function ($tache) {
             return $this->authorize('view', $tache);
         });*/

@@ -23,11 +23,10 @@ use App\Http\Controllers\NotificationController;
 Route::post('login', [LoginController::class , 'login']);   
 
 Route::middleware('auth:api')->group(function(){
-    Route::get('utilisateur', [UserController::class, 'index']);
     Route::get('utilisateur/{id}', [UserController::class, 'show']);
     Route::put('utilisateur/{id}', [UserController::class, 'update']);
     Route::delete('utilisateur/{id}', [UserController::class, 'destroy']);
-
+    
     Route::get('taches/{id}', [TachesController::class, 'show']);
     Route::delete('taches/{id}/validation', [TachesController::class, 'validationdelete'])->middleware('admin');
 });
@@ -39,7 +38,9 @@ Route::get('projet', [ProjetController::class, 'index']);
 Route::post('projet',[ProjetController::class, 'store']);
 Route::get('projet/{id}', [ProjetController::class, 'show']);
 Route::delete('projet/{id}', [ProjetController::class, 'destroy']);
+Route::post('invitation/{userid}/{projetid}', [ProjetController::class, 'invitation']);
 
+Route::get('utilisateur', [UserController::class, 'index']);
 Route::post('utilisateur', [Usercontroller::class, 'store']);
 
 Route::post('utilisateur/{idutilisateur}/{idtache}', [Usercontroller::class, 'associeruser']);

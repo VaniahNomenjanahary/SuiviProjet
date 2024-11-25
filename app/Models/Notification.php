@@ -16,6 +16,7 @@ class Notification extends Model
         'contenu',
         'id_utilisateur',
         'type',
-        'senderID'
+        'senderID',
+        'projet_id'
     ];
 }

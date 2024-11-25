@@ -40,6 +40,7 @@ class NotificationController extends Controller
     $notification->id_utilisateur = $request->input('id_utilisateur');
     $notification->type = $request->input('type');
     $notification->senderID = $request->input('senderID');
+    $notification->projet_id = $request->input('projet_id');
     $notification->save();
 
     return response()->json(['notification'=> $notification], 201);

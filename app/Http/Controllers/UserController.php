@@ -15,16 +15,16 @@ class UserController extends Controller
 {
     public function index(Request $request){
         $utilisateur = User::all();
-        $token = $request->header('Authorization');
-        if (!$token) {
-            return response()->json(['errors' => 'invalid token'], 401);
-        }
-        $token = str_replace('Bearer ', '', $token);
-        $payload = JWTAuth::setToken($token)->getPayload();
-        $role = $payload['role'];
-        if($role != 'admin') {
-            return response()->json(['errors' => 'user unhautorized'], 413);
-        }
+        // $token = $request->header('Authorization');
+        // if (!$token) {
+        //     return response()->json(['errors' => 'invalid token'], 401);
+        // }
+        // $token = str_replace('Bearer ', '', $token);
+        // $payload = JWTAuth::setToken($token)->getPayload();
+        // $role = $payload['role'];
+        // if($role != 'admin') {
+        //     return response()->json(['errors' => 'user unhautorized'], 413);
+        // }
 
         return response()->json(['user' => $utilisateur]);
     }

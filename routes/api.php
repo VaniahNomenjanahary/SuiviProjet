@@ -26,7 +26,9 @@ Route::middleware('auth:api')->group(function(){
     Route::get('utilisateur/{id}', [UserController::class, 'show']);
     Route::put('utilisateur/{id}', [UserController::class, 'update']);
     Route::delete('utilisateur/{id}', [UserController::class, 'destroy']);
+    Route::get('projet', [ProjetController::class, 'index']);
     
+
     Route::get('taches/{id}', [TachesController::class, 'show']);
     Route::delete('taches/{id}/validation', [TachesController::class, 'validationdelete'])->middleware('admin');
 });
@@ -34,7 +36,6 @@ Route::middleware('auth:api')->group(function(){
 Route::get('taches', [TachesController::class, 'index']);
 
 
-Route::get('projet', [ProjetController::class, 'index']);
 Route::post('projet',[ProjetController::class, 'store']);
 Route::get('projet/{id}', [ProjetController::class, 'show']);
 Route::delete('projet/{id}', [ProjetController::class, 'destroy']);

@@ -18,7 +18,7 @@ class Projet extends Model
     ];
 
     public function taches(){
-        return $this->hasMany(Tache::class);
+        return $this->hasMany(Taches::class, 'idprojet');
     }
 
     public function utilisateur(){

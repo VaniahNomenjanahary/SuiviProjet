@@ -8,7 +8,15 @@ use Carbon\Carbon;
 
 class TachesController extends Controller 
 {
-    public function index(){
+    public function index(Request $request){
+        $token = $request->header('Authorization');
+        if (!$token) {
+            return response()->json(['errors' => 'invalid token'], 401);
+        }
+        $token = str_replace('Bearer ', '', $token);
+        $payload = JWTAuth::setToken($token)->getPayload();
+        $id = $payload['id'];
+        
         $taches = Taches::with(['projet', 'statut', 'utilisateurs'])->get();
        /* $tachesAutorisees = $taches->filter(function ($tache) {
             return $this->authorize('view', $tache);

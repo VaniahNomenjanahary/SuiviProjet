@@ -24,8 +24,13 @@ class LoginController extends Controller
 
         $credentials = $request->only('mail', 'password');
 
+        $customClaims = [
+            'exp'=> now()->addDay()->timestamp
+        ];
+        $token = JWTAuth::claims($customClaims)->attempt($credentials);
+
         try {
-            if (!$token = JWTAuth::attempt($credentials)) {
+            if (!$token) {
                 return response()->json(['message' => 'Erreur Authentification'], 401);
             }
         } catch (JWTException $e) {

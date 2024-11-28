@@ -32,8 +32,8 @@ Route::middleware('auth:api')->group(function(){
     Route::get('taches/{id}', [TachesController::class, 'show']);
     Route::delete('taches/{id}/validation', [TachesController::class, 'validationdelete'])->middleware('admin');
 });
-
 Route::get('taches', [TachesController::class, 'index']);
+
 
 
 Route::post('projet',[ProjetController::class, 'store']);

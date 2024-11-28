@@ -21,6 +21,7 @@ class NotificationController extends Controller
       $notif->id_utilisateur = $notification[$i]->id_utilisateur;
       $notif->type = $notification[$i]->type;
       $notif->sender = $utilisateur->nom;
+      $notif->projet_id = $notification[$i]->projet_id;
       array_push($response, $notif);
     }
     return response()->json(['notification' => $response]);

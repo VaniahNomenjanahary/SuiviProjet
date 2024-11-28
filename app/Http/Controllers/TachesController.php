@@ -9,13 +9,13 @@ use Carbon\Carbon;
 class TachesController extends Controller 
 {
     public function index(Request $request){
-        $token = $request->header('Authorization');
-        if (!$token) {
-            return response()->json(['errors' => 'invalid token'], 401);
-        }
-        $token = str_replace('Bearer ', '', $token);
-        $payload = JWTAuth::setToken($token)->getPayload();
-        $id = $payload['id'];
+        // $token = $request->header('Authorization');
+        // if (!$token) {
+        //     return response()->json(['errors' => 'invalid token'], 401);
+        // }
+        // $token = str_replace('Bearer ', '', $token);
+        // $payload = JWTAuth::setToken($token)->getPayload();
+        // $id = $payload['id'];
         
         $taches = Taches::with(['projet', 'statut', 'utilisateurs'])->get();
        /* $tachesAutorisees = $taches->filter(function ($tache) {
